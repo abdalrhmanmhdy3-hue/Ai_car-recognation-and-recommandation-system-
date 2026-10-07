@@ -1,0 +1,232 @@
+:root {
+  --bg: #f4efe7;
+  --panel: #fffaf4;
+  --ink: #1f2933;
+  --muted: #687280;
+  --line: #e7d8c7;
+  --accent: #a63d40;
+  --accent-2: #1d5c63;
+  --shadow: 0 18px 40px rgba(46, 31, 20, 0.12);
+  --radius: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Cairo", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top right, rgba(166, 61, 64, 0.16), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(29, 92, 99, 0.14), transparent 28%),
+    linear-gradient(180deg, #f8f4ee 0%, var(--bg) 100%);
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.35fr 0.95fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.hero-copy,
+.hero-card,
+.panel,
+.car-card {
+  background: rgba(255, 250, 244, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(231, 216, 199, 0.95);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  padding: 34px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 3.5vw, 3.6rem);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.06rem;
+  line-height: 1.9;
+}
+
+.hero-card {
+  padding: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.upload-form {
+  width: 100%;
+  display: grid;
+  gap: 14px;
+}
+
+.upload-label {
+  font-weight: 700;
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+
+button {
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--accent), #d16349);
+  color: white;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.alert.error {
+  background: #fff1f1;
+  color: #8d272a;
+  border: 1px solid #f1c5c6;
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.result-grid,
+.cards {
+  display: grid;
+  gap: 22px;
+}
+
+.result-grid {
+  grid-template-columns: 1fr 1fr;
+  margin-top: 24px;
+}
+
+.panel,
+.reference-panel,
+.car-card {
+  padding: 24px;
+}
+
+.wide {
+  margin-top: 24px;
+}
+
+.preview-image,
+.car-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.stat-list,
+.specs-grid,
+.top-predictions {
+  display: grid;
+  gap: 12px;
+}
+
+.stat-list div,
+.specs-grid div,
+.prediction-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(231, 216, 199, 0.75);
+}
+
+.stat-list span,
+.specs-grid span,
+.prediction-row span {
+  color: var(--muted);
+}
+
+.car-layout {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.cards {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 20px;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+}
+
+.region-badge {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(29, 92, 99, 0.12);
+  color: var(--accent-2);
+  font-weight: 800;
+  font-size: 0.86rem;
+}
+
+.compact {
+  margin-top: 14px;
+}
+
+.image-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
+  border: 1px dashed var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .result-grid,
+  .car-layout,
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}

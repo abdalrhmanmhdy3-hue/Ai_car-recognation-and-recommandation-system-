@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام التعرف على السيارات والتوصية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Car AI Website</p>
+        <h1>التعرف على السيارة من الصورة واقتراح بدائل من صناعات مختلفة</h1>
+        <p class="lead">
+          ارفع صورة سيارة، وسيقوم الموقع بالتعرف على نوعها ثم اقتراح 3 سيارات قريبة في السعر:
+          يابانية، كورية، أو أمريكية أو ألمانية بحسب صناعة السيارة الأصلية.
+        </p>
+      </div>
+      <div class="hero-card">
+        <form method="post" enctype="multipart/form-data" class="upload-form">
+          <label for="car_image" class="upload-label">اختر صورة السيارة</label>
+          <input id="car_image" name="car_image" type="file" accept=".jpg,.jpeg,.png,.webp" required>
+          <button type="submit">ابدأ التحليل</button>
+        </form>
+        {% if error %}
+        <div class="alert error">{{ error }}</div>
+        {% endif %}
+      </div>
+    </section>
+
+    {% if result %}
+    <section class="result-grid">
+      <div class="panel">
+        <h2>نتيجة التوقع</h2>
+        <img class="preview-image" src="{{ result.uploaded_image_path }}" alt="Uploaded car image">
+        <div class="stat-list">
+          <div><span>الفئة المتوقعة</span><strong>{{ result.predicted_label }}</strong></div>
+          <div><span>البرند</span><strong>{{ result.predicted_brand }}</strong></div>
+          <div><span>الموديل</span><strong>{{ result.predicted_model }}</strong></div>
+          <div><span>الصناعة</span><strong>{{ result.predicted_region }}</strong></div>
+          <div><span>الثقة</span><strong>{{ result.confidence|percent }}</strong></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>أفضل التوقعات</h2>
+        <div class="top-predictions">
+          {% for item in result.top_predictions %}
+          <div class="prediction-row">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.confidence|percent }}</strong>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="reference-panel panel wide">
+      <h2>السيارة التي تم التعرف عليها</h2>
+      <div class="car-layout">
+        <div class="car-image-wrap">
+          {% if result.reference_car.image_url %}
+          <img class="car-image" src="{{ result.reference_car.image_url }}" alt="Recognized car">
+          {% else %}
+          <div class="image-placeholder">لا توجد صورة مرجعية</div>
+          {% endif %}
+        </div>
+        <div class="specs-grid">
+          <div><span>البرند</span><strong>{{ result.reference_car.brand }}</strong></div>
+          <div><span>الموديل</span><strong>{{ result.reference_car.model }}</strong></div>
+          <div><span>السنة</span><strong>{{ result.reference_car.model_year or '-' }}</strong></div>
+          <div><span>النوع</span><strong>{{ result.reference_car.type or '-' }}</strong></div>
+          <div><span>السعر</span><strong>{{ result.reference_car.msrp|price }}</strong></div>
+          <div><span>الاستهلاك</span><strong>{{ result.reference_car.miles_per_gallon or '-' }}</strong></div>
+          <div><span>فئة مميزة</span><strong>{{ result.reference_car.premium_version }}</strong></div>
+          <div><span>سيارة كلاسيكية</span><strong>{{ result.reference_car.collection_car }}</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="recommendations">
+      <h2>السيارات المقترحة من صناعات مختلفة</h2>
+      <div class="cards">
+        {% for car in result.recommendations %}
+        <article class="car-card">
+          <div class="card-top">
+            <p class="region-badge">{{ car.target_region }}</p>
+            <h3>{{ car.brand }} {{ car.model }}</h3>
+          </div>
+          {% if car.image_url %}
+          <img class="car-image" src="{{ car.image_url }}" alt="{{ car.brand }} {{ car.model }}">
+          {% else %}
+          <div class="image-placeholder">لا توجد صورة</div>
+          {% endif %}
+          <div class="specs-grid compact">
+            <div><span>السنة</span><strong>{{ car.model_year or '-' }}</strong></div>
+            <div><span>النوع</span><strong>{{ car.type or '-' }}</strong></div>
+            <div><span>السعر</span><strong>{{ car.msrp|price }}</strong></div>
+            <div><span>فرق السعر</span><strong>{{ car.price_difference|price }}</strong></div>
+            <div><span>الاستهلاك</span><strong>{{ car.miles_per_gallon or '-' }}</strong></div>
+            <div><span>Premium</span><strong>{{ car.premium_version }}</strong></div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </div>
+</body>
+</html>
